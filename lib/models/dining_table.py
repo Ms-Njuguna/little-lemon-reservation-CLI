@@ -22,4 +22,15 @@ class DiningTable(Base):
     def __repr__(self):
         return f"<Table #{self.number} cap={self.capacity} loc={self.location or '-'}>"
     
+    @validates("capacity")
+    def validate_capacity(self, key, value):
+        if value is None or value < 1:
+            raise ValueError("Capacity must be at least 1.")
+        return int(value)
+
+    @validates("number")
+    def validate_number(self, key, value):
+        if value is None or value < 1:
+            raise ValueError("Table number must be a positive integer.")
+        return int(value)
     
