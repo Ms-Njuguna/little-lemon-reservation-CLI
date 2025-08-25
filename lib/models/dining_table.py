@@ -34,3 +34,25 @@ class DiningTable(Base):
             raise ValueError("Table number must be a positive integer.")
         return int(value)
     
+    # ORM helpers
+    @classmethod
+    def create(cls, session, **kwargs):
+        obj = cls(**kwargs)
+        session.add(obj)
+        session.commit()
+        session.refresh(obj)
+        return obj
+
+    @classmethod
+    def get_all(cls, session):
+        return session.query(cls).order_by(cls.number).all()
+
+    @classmethod
+    def find_by_id(cls, session, id_):
+        return session.get(cls, id_)
+
+    def delete(self, session):
+        session.delete(self)
+        session.commit()
+
+        
