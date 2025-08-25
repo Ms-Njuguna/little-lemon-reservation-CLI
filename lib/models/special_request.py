@@ -1,3 +1,3 @@
-class Reservation:
+class SpecialRequest:
     def greeting():
         print("Heyy you")

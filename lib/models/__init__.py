@@ -1,29 +1,24 @@
 # lib/models/__init__.py
 import os
-from contextlib import contextmanager
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///lib/little_lemon.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///little_lemon.db")
 
-# sqlite needs check_same_thread=False for CLI use in the same process
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-engine = create_engine(DATABASE_URL, echo=False, future=True, connect_args=connect_args)
-
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+engine = create_engine(DATABASE_URL, echo=False, future=True)
+SessionLocal = scoped_session(sessionmaker(bind=engine, autoflush=False, autocommit=False))
 Base = declarative_base()
 
-@contextmanager
-def get_session():
-    session = SessionLocal()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
+# Import models so Alembic can find them via Base.metadata
+# (we'll create these files in Step 3)
+try:
+    from .customer import Customer
+    from .dining_table import DiningTable
+    from .reservation import Reservation
+    from .special_request import SpecialRequest
+except Exception:
+    # during first import before files exist
+    pass
