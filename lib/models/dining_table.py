@@ -18,3 +18,8 @@ class DiningTable(Base):
         back_populates="table",
         cascade="all, delete-orphan"
     )
+
+    def __repr__(self):
+        return f"<Table #{self.number} cap={self.capacity} loc={self.location or '-'}>"
+    
+    
