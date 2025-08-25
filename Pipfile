@@ -10,6 +10,8 @@ pytest = "7.1.3"
 sqlalchemy = "*"
 alembic = "*"
 click = "*"
+tabulate = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
