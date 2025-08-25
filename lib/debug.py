@@ -1,8 +1,11 @@
-#!/usr/bin/env python3
 # lib/debug.py
+#!/usr/bin/env python3
 
-from models.__init__ import CONN, CURSOR
+from models import get_session, Base, engine
 import ipdb
 
+# Example: create tables if not exist
+Base.metadata.create_all(bind=engine)
 
-ipdb.set_trace()
+with get_session() as session:
+    ipdb.set_trace()
